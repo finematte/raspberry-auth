@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'wifi_app/wifi.css' %}" />
+    <script src="{% static 'wifi_app/wifi.js' %}"></script>
+    <title>WiFi Networks</title>
+  </head>
+  <body>
+    <div class="wifi-header">
+      <h1>WiFi Networks</h1>
+      <button id="refresh-btn" class="refresh-btn">Refresh WiFi List</button>
+    </div>
+
+    <div class="wifi-list">
+      {% for wifi in wifilist %}
+      <div class="wifi-element">
+        <p>{{ wifi.ssid }}</p>
+        {% csrf_token %}
+        <form method="POST" action="{% url 'connect_to_network' %}">
+          <input type="hidden" name="ssid" value="{{ wifi.ssid }}" />
+          <button class="button" type="submit">Connect</button>
+        </form>
+      </div>
+      {% empty %}
+      <p class="no-wifi">No WiFi networks found.</p>
+      {% endfor %}
+    </div>
+  </body>
+</html>

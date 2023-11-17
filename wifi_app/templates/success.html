@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'wifi_app/success.css' %}" />
+    <title>WiFi Connected Successfully</title>
+    <script type="text/javascript">
+      setTimeout(function() {
+          fetch('/shutdown_hotspot/');
+      }, 5000);
+  </script>
+  </head>
+  
+  <body>
+    <h1>Connected Successfully</h1>
+    <div class="ssid-container">
+      <div class="ssid-label">SSID:</div>
+      <div class="ssid">{{ssid}}</div>
+    </div>
+    <div class="main-container">
+      <p>You have successfully connected to the WiFi network.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #444;
+  border-bottom: 2px solid #444;
+  margin-bottom: 20px;
+  padding: 10px 0 10px;
+}
+
+.ssid-container {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-top: 20px;
+}
+
+.input-container {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ssid-label,
+.pass {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+  width: 100%;
+}
+
+.pass {
+  padding-bottom: 0px;
+}
+
+.ssid {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+  background: #eaeaea;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.input-container {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 10px;
+  width: 260px;
+  text-align: center;
+  background: #eaeaea;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+}
+
+.password-input {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 90%;
+}
+
+.checkbox-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 15px;
+  padding: 5px;
+  padding-bottom: 2px;
+}
+
+.error-message {
+  width: 260px;
+  text-align: center;
+  background: #ffcccc; /* light red background */
+  color: #cc0000; /* dark red text */
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+

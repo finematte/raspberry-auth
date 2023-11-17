@@ -1,0 +1,90 @@
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+import wifi
+import string
+import os
+import subprocess
+import asyncio
+
+
+def check_wifi_connection():
+    result = subprocess.run(["iwgetid", "-r"], capture_output=True, text=True)
+    return result.stdout.strip()
+
+
+def connect_to_wifi(ssid, password):
+    config_lines = [
+        "network={\n",
+        '  ssid="{}"\n'.format(ssid),
+        '  psk="{}"\n'.format(password),
+        "}\n",
+    ]
+
+    with open("/etc/wpa_supplicant/wpa_supplicant.conf", "a") as wifi_config_file:
+        wifi_config_file.writelines(config_lines)
+
+    return os.system("wpa_cli -i wlan1 reconfigure")
+
+
+def wifi_view(request):
+    wifilist = []
+    cells = wifi.Cell.all("wlan1")
+
+    for cell in cells:
+        ssid = "".join(filter(lambda x: x in string.printable, cell.ssid))
+
+        if ssid and ssid not in [info["ssid"] for info in wifilist]:
+            wifi_info = {"ssid": ssid}
+            wifilist.append(wifi_info)
+
+    context = {"wifilist": wifilist}
+    return render(request, "wifi.html", context)
+
+
+@csrf_exempt
+def connect_to_network(request):
+    if request.method == "POST":
+        ssid = request.POST.get("ssid")
+        return render(request, "connect.html", {"ssid": ssid})
+    else:
+        return redirect("wifi_view")
+
+async def shutdown_hotspot():
+    await asyncio.sleep(10)
+    os.system("sudo systemctl stop hostapd")
+    
+@csrf_exempt
+def try_connect(request):
+    if request.method == "POST":
+        ssid = request.POST.get("ssid")
+        password = request.POST.get("password")
+        connect_to_wifi(ssid, password)
+        time.sleep(10)  # wait for a while to let the WiFi connection establish
+        if check_wifi_connection() == ssid:
+            print("OK")
+            messages.success(
+                request,
+                "Successfully connected to new network. Hotspot will be stopped shortly.",
+            )
+            asyncio.run(shutdown_hotspot())
+            return render(request, "success.html", {"ssid": ssid})
+        else:
+            print("NOT OKAY")
+            messages.error(
+                request, "Could not connect to network, please check your password."
+            )
+            return render(request, "connect.html", {"ssid": ssid})
+    else:
+        print("NOT OKAY 2")
+        return redirect("wifi_view")
+
+
+def success_view(request):
+    ssid = check_wifi_connection()
+    if ssid:
+        return render(request, "success.html", {"ssid": ssid})
+    else:
+        return redirect("wifi_view")
+

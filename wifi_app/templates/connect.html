@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'wifi_app/connect.css' %}" />
+    <script src="{% static 'wifi_app/connect.js' %}"></script>
+    <title>WiFi Networks</title>
+  </head>
+  <body>
+    <h1>Connect to WiFi</h1>
+    {% if password_error %}
+    <div class="error-message">
+        The password you entered is incorrect. Please try again.
+    </div>
+    {% endif %}    
+    <div class="ssid-container">
+      <div class="ssid-label">SSID:</div>
+      <div class="ssid">{{ssid}}</div>
+    </div>
+    <div class="main-container">
+      <div class="pass">Password:</div>
+      <div class="form-container">
+        <form method="POST" action="{% url 'try_connect' %}">
+          {% csrf_token %}
+          <input type="hidden" name="ssid" value="{{ ssid }}" />
+          <div class="input-container">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="password-input"
+            />
+            <input
+              type="text"
+              id="text-password"
+              name="text-password"
+              class="password-input"
+              style="display: none"
+            />
+            <div class="checkbox-label">
+              <div class="show-pass">Reveal password?</div>
+              <input type="checkbox" id="reveal-password" />
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">Connect</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
